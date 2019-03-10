@@ -55,7 +55,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shun\Shun.csproj">
+    <ProjectReference Include="..\shun-pos\Shun.csproj">
       <Project>{8d4b1d4b-1276-4116-ade0-2363baee5fbd}</Project>
       <Name>Shun</Name>
     </ProjectReference>
