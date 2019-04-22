@@ -30,23 +30,25 @@ namespace ShunUT
             var test5 = new Tuple<string, string>("ExpirationDate", expDate);
             var test6 = new Tuple<string, string>("SoftwareName", "Wibsar Retail");
             var test7 = new Tuple<string, string>("SoftwareRevision", "1.1.0");
-            var list = new List<Tuple<string, string>> { test1, test2, test3, test4, test5, test6, test7 };
+            var list = new List<Tuple<string, string>> {test1, test2, test3, test4, test5, test6, test7};
 
             //Insert
             mysql.Insert(list);
             //Update
             var update1 = new Tuple<string, string>("SoftwareName", "Wibsar Updated");
             var update2 = new Tuple<string, string>("SoftwareRevision", "9.9.9");
-            var updateList = new List<Tuple<string, string>>{update1, update2};
+            var updateList = new List<Tuple<string, string>> {update1, update2};
             mysql.Update("LicenseKey", "0x1546ACVFHB", updateList);
             //Verify all columns
-            mysql.Read(new List<Tuple<string, string>> { new Tuple<string, string>("LicenseKey", "0x1546ACVFHB") }, out var foundData);
+            mysql.Read(new List<Tuple<string, string>> {new Tuple<string, string>("LicenseKey", "0x1546ACVFHB")},
+                out var foundData);
             Assert.AreEqual(foundData.First().Item2[6].Item2, "Wibsar Updated");
             Assert.AreEqual(foundData.First().Item2[7].Item2, "9.9.9");
 
             //Remove
             mysql.Delete("CurrentUser", "TestUserName");
-            mysql.Read(new List<Tuple<string, string>> { new Tuple<string, string>("LicenseKey", "0x1546ACVFHB") }, out var foundData2);
+            mysql.Read(new List<Tuple<string, string>> {new Tuple<string, string>("LicenseKey", "0x1546ACVFHB")},
+                out var foundData2);
             Assert.AreEqual(foundData2.Count, 0);
         }
 
@@ -75,7 +77,8 @@ namespace ShunUT
             //Insert
             mysql.Insert(list);
             //Verify all columns
-            mysql.Read(new List<Tuple<string, string>>{new Tuple<string, string>("LicenseKey", "0x1546ACVFHB")}, out var foundData);
+            mysql.Read(new List<Tuple<string, string>> {new Tuple<string, string>("LicenseKey", "0x1546ACVFHB")},
+                out var foundData);
             Assert.AreEqual(foundData.First().Item2[1].Item2, "0x1546ACVFHB");
             Assert.AreEqual(foundData.First().Item2[2].Item2, "TestUserName");
             Assert.AreEqual(foundData.First().Item2[3].Item2, "1");
@@ -85,7 +88,8 @@ namespace ShunUT
 
             //Remove
             mysql.Delete("CurrentUser", "TestUserName");
-            mysql.Read(new List<Tuple<string, string>> { new Tuple<string, string>("LicenseKey", "0x1546ACVFHB") }, out var foundData2);
+            mysql.Read(new List<Tuple<string, string>> {new Tuple<string, string>("LicenseKey", "0x1546ACVFHB")},
+                out var foundData2);
             Assert.AreEqual(foundData2.Count, 0);
         }
 
@@ -138,15 +142,43 @@ namespace ShunUT
 
             var list = new List<Tuple<string, string>>
             {
-                test1, test2, test3, test4, test5, test6, test7, test8, test9,test10,
-                test11, test12, test13, test14, test15, test16, test17, test18, test19,
-                test20, test21, test22, test23, test24, test25, test26, test27, test28, test29, test30
+                test1,
+                test2,
+                test3,
+                test4,
+                test5,
+                test6,
+                test7,
+                test8,
+                test9,
+                test10,
+                test11,
+                test12,
+                test13,
+                test14,
+                test15,
+                test16,
+                test17,
+                test18,
+                test19,
+                test20,
+                test21,
+                test22,
+                test23,
+                test24,
+                test25,
+                test26,
+                test27,
+                test28,
+                test29,
+                test30
             };
 
             //Insert
             mysql.Insert(list);
             //Verify all columns
-            mysql.Read(new List<Tuple<string, string>> { new Tuple<string, string>("Codigo", "13450001") }, out var foundData);
+            mysql.Read(new List<Tuple<string, string>> {new Tuple<string, string>("Codigo", "13450001")},
+                out var foundData);
             Assert.AreEqual(foundData.First().Item2[1].Item2, "13450001");
             Assert.AreEqual(foundData.First().Item2[5].Item2, "10934709DSDV12450");
             Assert.AreEqual(foundData.First().Item2[8].Item2, "2010");
@@ -155,9 +187,47 @@ namespace ShunUT
 
             //Remove
             mysql.Delete("Codigo", "13450001");
-            mysql.Read(new List<Tuple<string, string>> { new Tuple<string, string>("Codigo", "13450001") }, out var foundData2);
+            mysql.Read(new List<Tuple<string, string>> {new Tuple<string, string>("Codigo", "13450001")},
+                out var foundData2);
             Assert.AreEqual(foundData2.Count, 0);
 
+        }
+
+        [TestMethod]
+        public void TestMethod4()
+        {
+            //Inventory Table Privileges
+            //Insert 2 rows, verify data, and then delete the same 2 rows
+            var server = "wibsarlicencias.csqn2onotlww.us-east-1.rds.amazonaws.com";
+            var database = "ConteinerTest";
+            //var userID = "conteiner";
+            //var password = "Conteiner00!";
+            var table = "Clientes";
+            var userID = "armoag";
+            var password = "Yadira00";
+
+            var mysql = new MySqlDatabase(server, database, table, userID, password);
+            var columns = new List<string>
+            {
+                "Id",
+                "Nombre",
+                "Email",
+                "Telefono",
+                "FechaRegistro",
+                "RFC",
+                "PuntosDisponibles",
+                "PuntosUsados",
+                "TotalVisitas",
+                "TotalVendido",
+                "UltimaVisitaFecha",
+                "Codigo"
+            };
+
+            var dataTable = mysql.SelectAll(columns);
+            var test1 = dataTable.Rows[0];
+            var test2 = test1["RFC"].ToString();
+            var test3 = dataTable.Rows[1];
+            var test4 = test3["UltimaVisitaFecha"].ToString();
         }
     }
 }
