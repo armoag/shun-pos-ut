@@ -229,5 +229,79 @@ namespace ShunUT
             var test3 = dataTable.Rows[1];
             var test4 = test3["UltimaVisitaFecha"].ToString();
         }
+
+        [TestMethod]
+        public void TestMethod5()
+        {
+            //Inventory Table Privileges
+            //Insert 2 rows, verify data, and then delete the same 2 rows
+            var server = "wibsarlicencias.csqn2onotlww.us-east-1.rds.amazonaws.com";
+            var database = "EstrellaTest";
+            var table = "Inventario";
+            var userID = "armoag";
+            var password = "Yadira00";
+
+            var mysql = new MySqlDatabase(server, database, table, userID, password);
+            List<string> data = new List<string>()
+            {
+                "Id",
+                "Codigo",
+                "CodigoAlterno",
+                "ProveedorProductoId",
+                "Descripcion",
+                "Proveedor",
+                "Categoria",
+                "Costo",
+                "CostoMoneda",
+                "Precio",
+                "PrecioMoneda",
+                "CantidadInternoHistorial",
+                "CantidadVendidoHistorial",
+                "VendidoHistorial",
+                "CantidadLocal",
+                "CantidadDisponibleTotal",
+                "CantidadMinima",
+                "Imagen"
+            };
+
+            List<string> longData = new List<string>()
+            {
+                "Id",
+                "Codigo",
+                "CodigoAlterno",
+                "ProveedorProductoId",
+                "Descripcion",
+                "Proveedor",
+                "Categoria",
+                "UltimoPedidoFecha",
+                "Costo",
+                "CostoMoneda",
+                "Precio",
+                "PrecioMoneda",
+                "CantidadInternoHistorial",
+                "CantidadVendidoHistorial",
+                "VendidoHistorial",
+                "CantidadLocal",
+                "CantidadDisponibleTotal",
+                "CantidadMinima",
+                "UltimaTransaccionFecha",
+                "Imagen"
+            };
+
+            List<int> dataIndex = new List<int>()
+            {
+                1, 4, 6, 10, 11, 15, 16
+            };
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            // the code that you want to measure comes here
+            var dataTable = mysql.Select(longData);
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            watch.Start();
+            var longDataTable = mysql.Select(data);
+            watch.Stop();
+            var elapsedMs2 = watch.ElapsedMilliseconds;
+        }
     }
 }
