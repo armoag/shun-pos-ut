@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -303,5 +304,79 @@ namespace ShunUT
             watch.Stop();
             var elapsedMs2 = watch.ElapsedMilliseconds;
         }
+
+        [TestMethod]
+        public void TestMethod6()
+        {
+            ////Entity Framework Testing
+            //Database.SetInitializer<DemoContext>(new DropCreateDatabaseAlways<DemoContext>());
+            //Console.WriteLine("Inserting registers");
+            //var dbContext = new DemoContext();
+            //Person person = new Person();
+            //person.Name = "arturo";
+            //person.Birthdate = new DateTime(1987,10,03);
+            //person.Id = 1;
+            //person.Age = 32;
+
+            //Person person2 = new Person();
+            //person.Name = "yadira";
+            //person.Birthdate = new DateTime(1987, 03, 31);
+            //person.Id = 1;
+            //person.Age = 32;
+            //dbContext.People.Add(person);
+            //dbContext.People.Add(person2);
+
+            //dbContext.SaveChanges();
+
+            //var peopleList = from p in dbContext.People select p;
+            //foreach (var p in peopleList)
+            //{
+            //    Console.WriteLine(p);
+            //}
+
+
+            //Console.ReadLine();
+        }
+
+        [TestMethod]
+        public void TestMethod7()
+        {
+
+        }
+
+        [TestMethod]
+        public void TestMethod8()
+        {
+            //Insert 2 rows, verify data, and then delete the same 2 rows
+            var server = "wibsarlicencias.csqn2onotlww.us-east-1.rds.amazonaws.com";
+            var database = @"C:\Projects\wibsar-pos-solution\shun-pos\PosDB.db";
+            var table = "Customers";
+            var userID = "armoag";
+            var password = "Yadira00";
+
+            var mysql = new SqliteDatabase(server, database, table, userID, password);
+            var test1 = new Tuple<string, string>("Nombre", "Arturo");
+            var test2 = new Tuple<string, string>("Codigo", "123456c");
+            var dateNow = DateTime.Now.ToString("yyyy-MM-dd H:mm:ss");
+            var test3 = new Tuple<string, string>("FechaRegistro", dateNow);
+            var test4 = new Tuple<string, string>("Telefono", "6192077187");
+            var list = new List<Tuple<string, string>> { test1, test2, test3, test4 };
+
+            //Insert
+            mysql.Insert(list);
+            //Verify all columns
+            mysql.Read("Codigo", "123456b", out var foundData1);
+
+            //mysql.Read(new List<Tuple<string, string>> { new Tuple<string, string>("Nombre", "Arturo") },
+            //    out var foundData);
+            Assert.AreEqual(foundData1.First().Item2[1].Item2, "Arturo");
+            Assert.AreEqual(foundData1.First().Item2[2].Item2, "123456b");
+
+            //Remove
+            mysql.Delete("Nombre", "Arturo");
+            mysql.Read("Codigo", "123456b", out var foundData2);
+            Assert.AreEqual(foundData2.Count, 0);
+        }
     }
 }
+    
